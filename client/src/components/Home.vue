@@ -1,84 +1,48 @@
 <template>
-  <div class="container">
 
-    <!-- <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img class="d-block w-100" src="./lake.jpg" alt="First slide">
-        </div>
-        <div class="carousel-item">
-          <img class="d-block w-100" src="./asphalt-autumn.jpg" alt="Second slide">
-        </div>
-        <div class="carousel-item">
-          <img class="d-block w-100" src="./lake.jpg" alt="Third slide">
-        </div>
-      </div>
-    </div> -->
+  <div id="container">
 
-   <!-- <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img class="d-block w-100" src="https://placeimg.com/1080/500/animals" alt="First slide">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>My Caption Title (1st Image)</h5>
-                <p>The whole caption will only show up if the screen is at least medium size.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img class="d-block w-100" src="https://placeimg.com/1080/500/arch" alt="Second slide">
-        </div>
-        <div class="carousel-item">
-            <img class="d-block w-100" src="https://placeimg.com/1080/500/nature" alt="Third slide">
-        </div>
+    <div v-if="loading" class="">
+      <b-spinner label="Loading..." style="width: 6rem; height: 6rem;"></b-spinner>
     </div>
-    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div> -->
 
-    <!-- <ApolloQuery :query="getPostsQuery">
-      <template slot-scope="{ result: { loading, error, data } }">
-        <div v-if="loading">Loading...</div>
-        <div v-else-if="error">ERROR! {{error.message}}</div>
-        <ul v-else v-for="post in data.getPosts" :key="post._id">
-          <li>
-            {{post.title}} {{post.imageUrl}} {{post.likes}}
-          </li>
-        </ul>
-      </template>
-    </ApolloQuery> -->
-
+    <b-carousel id="carousel-1" v-if="!loading && posts.length > 0" v-model="slide" :interval="4000" controls indicators background="#ababab"
+      img-width="600" img-height="600" style="text-shadow: 1px 1px 2px #333;" @sliding-start="onSlideStart" @sliding-end="onSlideEnd">
+      <!-- Slide Item  -->
+      <b-carousel-slide v-for="post in posts" :key="post._id" :caption="post.title" :text="post.description" :img-src="post.imageUrl"></b-carousel-slide>
+    </b-carousel>
   </div>
+
 </template>
 
 <script>
   import { gql } from 'apollo-boost';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'home',
+    created() {
+      this.handleGetCarouselPosts();
+    },
+    computed: {
+      ...mapGetters(['loading', 'posts'])
+    },
     data() {
       return {
-        getPostsQuery: gql`
-        query {
-          getPosts {
-          _id
-          title
-          imageUrl
-          description
-          likes
-          }
-        }
-        `
+        slide: 0,
+        sliding: null
+      }
+    },
+    methods: {
+      handleGetCarouselPosts() {
+        // Reach out to Vuex store, and fire action that gets posts for the carousel
+        this.$store.dispatch("getPosts");
+      },
+      onSlideStart(slide) {
+        this.sliding = true
+      },
+      onSlideEnd(slide) {
+        this.sliding = false
       }
     }
   }
