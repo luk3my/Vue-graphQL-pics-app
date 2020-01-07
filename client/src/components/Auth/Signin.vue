@@ -22,10 +22,10 @@
 
             <b-button v-if="loading" variant="primary" disabled>
                 <b-spinner small type="grow"></b-spinner>
-                Loading...
+                Singing In
             </b-button>
 
-            <b-button v-else-if="!loading" variant="primary" type="submit">Sign In</b-button>
+            <b-button v-else-if="!loading" :disabled="loading" variant="primary" type="submit">Sign In</b-button>
 
         </b-form>
 
