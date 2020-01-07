@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import router from '../router/index';
+import router from "../router/index";
 
 import { defaultClient as ApolloClient } from "../main";
 
@@ -12,7 +12,8 @@ export default new Vuex.Store({
   state: {
     posts: [],
     user: null,
-    loading: false
+    loading: false,
+    error: null
   },
   mutations: {
     setPosts: (state, payload) => {
@@ -24,7 +25,11 @@ export default new Vuex.Store({
     setLoading: (state, payload) => {
       state.loading = payload;
     },
-    clearUser: state => (state.user = null)
+    setError: (state, payload) => {
+      state.error = payload;
+    },
+    clearUser: state => (state.user = null),
+    clearError: state => (state.error = null)
   },
   actions: {
     getCurrentUser: ({ commit }) => {
@@ -35,7 +40,7 @@ export default new Vuex.Store({
         .then(({ data }) => {
           commit("setLoading", false);
           //Add user to state
-          commit('setUser', data.getCurrentUser)
+          commit("setUser", data.getCurrentUser);
           console.log(data.getCurrentUser);
         })
         .catch(err => {
@@ -61,34 +66,42 @@ export default new Vuex.Store({
         });
     },
     signinUser({ commit }, payload) {
+      commit("clearError");
+      commit("setLoading", true);
+      //Clear token to prevent errors
+      localStorage.setItem("token", "");
       ApolloClient.mutate({
         mutation: SIGNIN_USER,
         variables: payload
       })
         .then(({ data }) => {
+          commit("setLoading", false);
           localStorage.setItem("token", data.signinUser.token);
           // to make sure created method is run in main.js- run getCurrentUser, reload the page
           router.go();
         })
         .catch(err => {
+          commit("setLoading", false);
+          commit("setError", err);
           console.error(err);
         });
     },
     signoutUser: async ({ commit }) => {
       //Clear user in sate
-      commit('clearUser')
+      commit("clearUser");
       //Remove user in local storage
-      localStorage.setItem('token', '');
+      localStorage.setItem("token", "");
       //End the session
       await ApolloClient.resetStore();
       //Redirect home - disallow acess to private pages
-      router.push('/');
+      router.push("/");
     }
   },
   getters: {
     posts: state => state.posts,
     user: state => state.user,
-    loading: state => state.loading
+    loading: state => state.loading,
+    error: state => state.error
   },
   modules: {}
 });

@@ -1,13 +1,24 @@
 import Vue from "vue";
 import App from "./App.vue";
 import "./registerServiceWorker";
+
 import router from "./router";
 import store from "./store";
+
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+
 import ApolloClient from "apollo-boost";
 import VueApollo from "vue-apollo";
+
+import FormAlert from './components/Shared/FormAlert';
+
+//Register globally
+Vue.component('form-alert', FormAlert);
+
+
+
 // import { library } from '@fortawesome/fontawesome-svg-core'
 // import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
