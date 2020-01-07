@@ -27,49 +27,77 @@
         </b-nav-form>
       </b-navbar-nav>
 
+      <!-- profile button -->
+
+      <b-button variant="warning" to="/profile" v-if="user" style="margin-left: 15px;">Profile
+         <b-badge>
+           <!-- <span slot="badge">1</span> -->
+         </b-badge>
+      </b-button>
+
+      <!-- Sign out button -->
+
+      <b-button @click="handleSignoutUser" variant="primary" to="/signout" v-if="user" style="margin-left: 15px;">Sign Out
+         <b-badge>
+         </b-badge>
+      </b-button>
+
     </b-navbar>
     <!-- App content -->
-    <main>   
+    <main>
       <transition name="fade">
         <router-view/>
-      </transition>  
+      </transition>
     </main>
   </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'App',
+    methods: {
+      handleSignoutUser() {
+       this.$store.dispatch('signoutUser');
+      }
+    },
     computed: {
+      ...mapGetters(['user']),
       horizontalNavItems() {
-        return [
-          {info: 'POSTS', title: 'Posts', link: '/posts'},
-          {info: 'SIGN IN', title: 'Sign In', link: '/signin'},
-          {info: 'SIGN UP', title: 'Sign Up', link: '/signup'}
-        ]
+        let items = [
+          { info: 'POSTS', title: 'Posts', link: '/posts' },
+          { info: 'SIGN IN', title: 'Sign In', link: '/signin' },
+          { info: 'SIGN UP', title: 'Sign Up', link: '/signup' }
+        ];
+        if (this.user) {
+          items = [
+            { info: 'POSTS', title: 'Posts', link: '/posts' },
+            { info: 'CREATE POST', title: 'Create Post', link: '/post/add' }
+          ]
+        }
+        return items
       }
     }
   }
+
 </script>
 
 
 <style>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition-property: all;
+    transition-duration: 0.25s;
+  }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition-property: all;
-  transition-duration: 0.25s;
-}
+  .fade-enter-active {
+    transition-delay: 0.25s;
+  }
 
-.fade-enter-active {
-  transition-delay: 0.25s;
-}
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-  transform: translateX(-25px);
-}
-
+  .fade-enter,
+  .fade-leave-active {
+    opacity: 0;
+    transform: translateX(-25px);
+  }
 </style>
