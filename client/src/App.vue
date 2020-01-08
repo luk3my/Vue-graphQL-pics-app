@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Horizontal Navbar -->
-    <b-navbar toggleable="lg" type="dark" variant="info" fixed>
+    <b-navbar toggleable="lg" type="dark" variant="info" fixed style="box-shadow: 2px 10px 10px rgba(0,0,0,0.3); z-index: 99999; margin-bottom: 15px;">
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -10,6 +10,11 @@
         <b-navbar-nav style="float: right">
           <b-nav-item v-for="item in horizontalNavItems" :key="item.title" :to="item.link">{{item.info}}</b-nav-item>
         </b-navbar-nav>
+
+        <b-badge>
+          <span slot="badge">1</span>
+        </b-badge>
+
       </b-collapse>
 
       <!-- App Title -->
@@ -27,19 +32,12 @@
         </b-nav-form>
       </b-navbar-nav>
 
-      <!-- profile button -->
-
-      <b-button variant="warning" to="/profile" v-if="user" style="margin-left: 15px;">Profile
-         <b-badge>
-           <!-- <span slot="badge">1</span> -->
-         </b-badge>
-      </b-button>
 
       <!-- Sign out button -->
 
-      <b-button @click="handleSignoutUser" variant="primary" to="/signout" v-if="user" style="margin-left: 15px;">Sign Out
-         <b-badge>
-         </b-badge>
+      <b-button @click="handleSignoutUser" variant="warning" to="/signout" v-if="user" style="margin-left: 15px;">Sign Out
+        <b-badge>
+        </b-badge>
       </b-button>
 
     </b-navbar>
@@ -59,7 +57,7 @@
     name: 'App',
     methods: {
       handleSignoutUser() {
-       this.$store.dispatch('signoutUser');
+        this.$store.dispatch('signoutUser');
       }
     },
     computed: {
@@ -73,7 +71,8 @@
         if (this.user) {
           items = [
             { info: 'POSTS', title: 'Posts', link: '/posts' },
-            { info: 'CREATE POST', title: 'Create Post', link: '/post/add' }
+            { info: 'CREATE POST', title: 'Create Post', link: '/post/add' },
+            { info: 'PROFILE', title: 'profile', link: '/profile' },
           ]
         }
         return items

@@ -13,10 +13,10 @@
         <b-form inline @submit.prevent="handleSigninUser" style="margin-top: 20px;">
 
             <label class="sr-only" for="inline-form-input-name">Name</label>
-            <b-input id="inline-form-input-name" class="mb-2 mr-sm-2 mb-sm-0" placeholder="User Name" v-model="username"></b-input>
+            <b-input id="inline-form-input-name" class="mb-2 mr-sm-2 mb-sm-0" placeholder="User Name" type="text" v-model="username"></b-input>
 
             <label class="sr-only" for="inline-form-input-name">Pasword</label>
-            <b-input id="inline-form-input-password" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Password" v-model="password"></b-input>
+            <b-input id="inline-form-input-password" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Password" type="password" v-model="password"></b-input>
 
             <!-- Spinner in button if loading -->
 
