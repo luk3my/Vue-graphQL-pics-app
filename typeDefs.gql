@@ -22,7 +22,7 @@ type Post {
 
 type Message {
   _id: ID
-  mesageBody: String!
+  messageBody: String!
   messageDate: String
   messageUser: User!
 }
@@ -39,6 +39,7 @@ type PostsPage {
 type Query {
   getCurrentUser: User
   getPosts: [Post]
+  getPost(postId: ID!): Post!
   infiniteScrollPosts(pageNum: Int!, pageSize: Int!): PostsPage
 }
 

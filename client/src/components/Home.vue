@@ -10,7 +10,7 @@
       <b-carousel id="carousel-1" v-if="!loading && posts.length > 0" v-model="slide" :interval="4000" controls indicators background="#ababab"
         img-width="600" img-height="600" style="text-shadow: 1px 1px 2px #333;" @sliding-start="onSlideStart" @sliding-end="onSlideEnd">
         <!-- Slide Item  -->
-        <b-carousel-slide v-for="post in posts" :key="post._id" :caption="post.title" :text="post.description" :img-src="post.imageUrl"></b-carousel-slide>
+        <b-carousel-slide @click.native="goToPost(post._id)" v-for="post in posts" :key="post._id" :caption="post.title" :text="post.description" :img-src="post.imageUrl" style="cursor: pointer;"></b-carousel-slide>
       </b-carousel>
     </b-row>
   </b-container>
@@ -45,6 +45,9 @@
       },
       onSlideEnd(slide) {
         this.sliding = false
+      },
+      goToPost(postId) {
+        this.$router.push(`/posts/${postId}`)
       }
     }
   }

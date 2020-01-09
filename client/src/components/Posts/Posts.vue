@@ -1,25 +1,43 @@
 <template>
 
-     <b-container v-if="infiniteScrollPosts"> 
-         <div v-for="post in infiniteScrollPosts.posts" :key="post._id">
-            <img :src="post.imageUrl" height="100px">
-            <h5>{{post.title}}</h5>
-        </div> 
-        <b-button @click="showMorePosts" v-if="showMoreEnabled">Fetch More</b-button>
+    <b-container class="bv-example-row" v-if="infiniteScrollPosts">
+        <b-row class="justify-content-sm-center" style="margin-top: 10px;">
+            <b-col v-for="post in infiniteScrollPosts.posts" :key="post._id" cols="12" md="4" style="margin-bottom: 15px;">
+                <div class="card" style="width: 100%; box-shadow: 2px 10px 10px rgba(0,0,0,0.3)">
+                    <img @click="goToPost(post._id)" class="card-img-top" style="cursor: pointer" height="200px" :src="post.imageUrl" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{post.title}}</h5>
+                        <p class="card-text">{{post.description}} <span @click="showPostCreator = !showPostCreator" style="font-weight: bold; cursor: pointer;">show</span></p>
+
+                    </div>
+                    <div class="card-footer text-muted" v-show="showPostCreator">
+                        <img :src="post.createdBy.avatar" height="25px"> <span>{{post.createdBy.username}}</span><br>
+                        <small>Added: {{post.createdDate}}</small>
+                    </div>
+                </div>
+            </b-col>
+        </b-row>
+        <b-row align-h="center" style="margin-top: 20px;">
+            <b-col cols="1">
+                <b-button @click="showMorePosts" v-if="showMoreEnabled">More</b-button>
+            </b-col>
+        </b-row>
     </b-container>
+
 </template>
 
 <script>
     import { INFINITE_SCROLL_POSTS } from '../../queries';
 
-    const pageSize = 2;
+    const pageSize = 3;
 
     export default {
         name: "Posts",
         data() {
             return {
                 pageNum: 1,
-                showMoreEnabled: true
+                showMoreEnabled: true,
+                showPostCreator: false
             }
         },
         apollo: {
@@ -59,6 +77,9 @@
                         }
                     }
                 })
+            },
+            goToPost(postId) {
+                this.$router.push(`/posts/${postId}`)
             }
         }
     };
