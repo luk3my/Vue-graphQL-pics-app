@@ -12,9 +12,11 @@ module.exports = {
       if (!currentUser) {
         return null;
       }
-      const User2 = await User.findOne({ username: currentUser.username }).populate({
-        path: 'favorites',
-        model: 'Post'
+      const User2 = await User.findOne({
+        username: currentUser.username
+      }).populate({
+        path: "favorites",
+        model: "Post"
       });
       return User2;
     },
@@ -26,6 +28,32 @@ module.exports = {
           model: "User"
         });
       return posts;
+    },
+    infiniteScrollPosts: async (_, { pageNum, pageSize }, { Post }) => {
+      let posts;
+      if (pageNum === 1) {
+        posts = await Post.find({})
+          .sort({ createdDate: "desc" })
+          .populate({
+            path: "createdBy",
+            model: "User"
+          })
+          .limit(pageSize);
+      } else {
+        //If page number is greater than one, figure out how many posts to skip
+        const skips = pageSize * (pageNum - 1);
+        posts = await Post.find({})
+          .sort({ createdDate: "desc" })
+          .populate({
+            path: "createdBy",
+            model: "User"
+          })
+          .skip(skips)
+          .limit(pageSize);
+      }
+      const totalDocs = await Post.count();
+      const hasMore = totalDocs > pageSize * pageNum;
+      return { posts, hasMore };
     }
   },
 

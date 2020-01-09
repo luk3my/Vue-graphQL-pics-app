@@ -25,7 +25,7 @@
 
                 <!-- Categories Select -->
                 <b-form-group id="input-group-3" label="Categoties:" label-for="input-3">
-                    <b-form-select id="input-3" v-model="categories" :options="['art', 'travel', 'nature', 'cityscape', 'animals', 'weather']" required></b-form-select>
+                    <b-form-select id="input-3" v-model="categories" :options="['art', 'travel', 'nature', 'cityscape', 'animals', 'weather', 'food', 'music']" required></b-form-select>
                 </b-form-group>
 
                 <!-- Description Text Area -->

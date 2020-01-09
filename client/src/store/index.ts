@@ -4,7 +4,13 @@ import router from "../router/index";
 
 import { defaultClient as ApolloClient } from "../main";
 
-import { GET_CURRENT_USER, GET_POSTS, SIGNIN_USER, SIGNUP_USER, ADD_POST  } from "../queries";
+import {
+  GET_CURRENT_USER,
+  GET_POSTS,
+  SIGNIN_USER,
+  SIGNUP_USER,
+  ADD_POST
+} from "../queries";
 
 Vue.use(Vuex);
 
@@ -15,7 +21,7 @@ export default new Vuex.Store({
     loading: false,
     error: null
   },
-
+  // Update(mutate) the values of the original state after the user has made changes
   mutations: {
     setPosts: (state, payload) => {
       state.posts = payload;
@@ -32,8 +38,8 @@ export default new Vuex.Store({
     clearUser: state => (state.user = null),
     clearError: state => (state.error = null)
   },
-
   actions: {
+    // Get current user
     getCurrentUser: ({ commit }) => {
       commit("setLoading", true);
       ApolloClient.query({
@@ -50,7 +56,7 @@ export default new Vuex.Store({
           console.error(err);
         });
     },
-
+    // Get Posts
     getPosts: ({ commit }) => {
       commit("setLoading", true);
       // use ApolloClient to fire getPosts query
@@ -68,20 +74,40 @@ export default new Vuex.Store({
           console.log(err);
         });
     },
-
+    // Add Posts
     addPost: ({ commit }, payload) => {
       ApolloClient.mutate({
         mutation: ADD_POST,
-        variables: payload
+        variables: payload,
+        update: (cache, { data: { addPost } }) => {
+          //Read data from the query to be updated
+          const data = cache.readQuery({ query: GET_POSTS });
+          //Create Updated data
+          data.getPosts.unshift(addPost);
+          //Write updated data back to query
+          cache.writeQuery({
+            query: GET_POSTS,
+            data
+          });
+        },
+        //Ensures data is added immediately as specified for the update function
+        optimisticResponse: {
+          __typename: "Mutation",
+          addPost: {
+            __typename: "Post",
+            _id: -1,
+            ...payload
+          }
+        }
       })
-      .then(({ data }) => {
-        console.log(data.addPost);
-      })
-      .catch(err => {
-        console.error(err);
-      })
+        .then(({ data }) => {
+          console.log(data.addPost);
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
-
+    // Sign in a user
     signinUser({ commit }, payload) {
       commit("clearError");
       commit("setLoading", true);
@@ -101,8 +127,8 @@ export default new Vuex.Store({
           console.error(err);
         });
     },
-
-      signupUser({ commit }, payload) {
+    // Sign up new user
+    signupUser({ commit }, payload) {
       commit("clearError");
       commit("setLoading", true);
       ApolloClient.mutate({
@@ -121,7 +147,7 @@ export default new Vuex.Store({
           console.error(err);
         });
     },
-
+    // Sign out user
     signoutUser: async ({ commit }) => {
       //Clear user in sate
       commit("clearUser");
@@ -133,7 +159,7 @@ export default new Vuex.Store({
       router.push("/");
     }
   },
-
+  // Get state for use in views
   getters: {
     posts: state => state.posts,
     user: state => state.user,
