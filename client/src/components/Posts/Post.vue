@@ -3,7 +3,7 @@
         <div class="card text-center">
             <div class="card-header" style="background-color: white">
                 <span style="font-weight: bold; font-size: 22px; float: left;">{{getPost.title}} 
-                     <b-badge v-if="user" @click="handleToggleLike(getPost._id)" style="cursor: pointer;">Like</b-badge> <small>{{getPost.likes}} Likes</small> 
+                     <b-badge v-if="user" @click="handleToggleLike(getPost._id)" style="cursor: pointer;"><i class="fas fa-thumbs-up"></i></b-badge> <small>{{getPost.likes}} Likes</small> 
                 </span>
                 <a @click="goToPreviousPage" class="btn" style="float: right; background-color: lightgrey; color: white;"><span>Back</span></a>
             </div>

@@ -8,7 +8,7 @@
       <!-- Horizontal Links -->
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav style="float: right">
-          <b-nav-item v-for="item in horizontalNavItems" :key="item.title" :to="item.link">{{item.info}}</b-nav-item>
+          <b-nav-item v-for="item in horizontalNavItems" :key="item.title" :to="item.link"><i style="font-size: 30px;" :class="item.icon"></i> {{item.info}}</b-nav-item>
         </b-navbar-nav>
 
         <!-- <b-badge vif="user" style="background-color: #3234a8; margin-bottom: 15px;">
@@ -18,7 +18,7 @@
       </b-collapse>
 
       <!-- App Title -->
-      <b-navbar-brand>
+      <b-navbar-brand style="font-size: 25px">
         <router-link to="/" tag="span" style="cursor: pointer">
           VueShare
         </router-link>
@@ -35,9 +35,12 @@
 
       <!-- Sign out button -->
 
-      <b-button @click="handleSignoutUser" variant="warning" to="/signout" v-if="user" style="margin-left: 15px;">Sign Out
-        <b-badge>
-        </b-badge>
+      <b-button @click="handleSignoutUser" variant="warning" to="/signout" v-if="user" style="margin-left: 15px;"><i class="fas fa-sign-in-alt"></i> Sign Out
+       
+      </b-button>
+
+      <b-button variant="warning" to="/signin" v-if="!user" style="margin-left: 15px;"><i class="fas fa-sign-out-alt"></i> Sign In
+        
       </b-button>
 
     </b-navbar>
@@ -64,15 +67,14 @@
       ...mapGetters(['user', 'userFavorites']),
       horizontalNavItems() {
         let items = [
-          { info: 'POSTS', title: 'Posts', link: '/posts' },
-          { info: 'SIGN IN', title: 'Sign In', link: '/signin' },
-          { info: 'SIGN UP', title: 'Sign Up', link: '/signup' }
+          { info: 'POSTS', title: 'Posts', link: '/posts', icon: 'far fa-image' },
+          { info: 'SIGN UP', title: 'Sign Up', link: '/signup', icon: 'fas fa-user-plus'}
         ];
         if (this.user) {
           items = [
-            { info: 'POSTS', title: 'Posts', link: '/posts' },
-            { info: 'ADD POST', title: 'Create Post', link: '/post/add' },
-            { info: 'PROFILE', title: 'profile', link: '/profile' },
+            { info: 'POSTS', title: 'Posts', link: '/posts', icon: 'far fa-image'},
+            { info: 'ADD POST', title: 'Create Post', link: '/post/add', icon: 'far fa-address-card'},
+            { info: 'PROFILE', title: 'profile', link: '/profile', icon: 'fas fa-id-card-alt'},
           ]
         }
         return items

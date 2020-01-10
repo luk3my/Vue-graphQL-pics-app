@@ -7,7 +7,7 @@
                     <img @click="goToPost(post._id)" class="card-img-top" style="cursor: pointer" height="200px" :src="post.imageUrl" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{post.title}}</h5>
-                        <p class="card-text">{{post.description}} <span @click="showPostCreator = !showPostCreator" style="font-weight: bold; cursor: pointer;">show</span></p>
+                        <p class="card-text">{{post.description}} <span @click="showPostCreator = !showPostCreator" style="font-weight: bold; cursor: pointer;"><i style="font-size: 20px; float: right;" class="fas fa-chevron-circle-down"></i></span></p>
 
                     </div>
                     <div class="card-footer text-muted" v-show="showPostCreator">
