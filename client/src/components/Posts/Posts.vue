@@ -29,7 +29,7 @@
 <script>
     import { INFINITE_SCROLL_POSTS } from '../../queries';
 
-    const pageSize = 3;
+    const pageSize = 6;
 
     export default {
         name: "Posts",

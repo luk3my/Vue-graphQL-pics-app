@@ -7,9 +7,11 @@ import { defaultClient as ApolloClient } from "../main";
 import {
   GET_CURRENT_USER,
   GET_POSTS,
+  GET_USER_POSTS,
   SIGNIN_USER,
   SIGNUP_USER,
-  ADD_POST
+  ADD_POST,
+  DELETE_USER_POST
 } from "../queries";
 
 Vue.use(Vuex);
@@ -17,6 +19,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     posts: [],
+    userPosts: [],
     user: null,
     loading: false,
     error: null
@@ -28,6 +31,9 @@ export default new Vuex.Store({
     },
     setUser: (state, payload) => {
       state.user = payload;
+    },
+    setUserPosts: (state, payload) => {
+      state.userPosts = payload;
     },
     setLoading: (state, payload) => {
       state.loading = payload;
@@ -74,6 +80,19 @@ export default new Vuex.Store({
           console.log(err);
         });
     },
+    //Get User Posts
+    getUserPosts: ({ commit }, payload) => {
+      ApolloClient.query({
+        query: GET_USER_POSTS,
+        variables: payload
+      })
+        .then(({ data }) => {
+          commit("setUserPosts", data.getUserPosts);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
     // Add Posts
     addPost: ({ commit }, payload) => {
       ApolloClient.mutate({
@@ -102,6 +121,26 @@ export default new Vuex.Store({
       })
         .then(({ data }) => {
           console.log(data.addPost);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    //Delete User Post
+    deleteUserPost: ({ state, commit }, payload) => {
+      ApolloClient.mutate({
+        mutation: DELETE_USER_POST,
+        variables: payload
+      })
+        .then(({ data }) => {
+          const index = state.userPosts.findIndex(
+            post => post._id === data.deleteUserPost._id
+          );
+          const userPosts = [
+            ...state.userPosts.slice(0, index),
+            ...state.userPosts.slice(index + 1)
+          ];
+          commit("setUserPosts", userPosts);
         })
         .catch(err => {
           console.error(err);
@@ -162,7 +201,9 @@ export default new Vuex.Store({
   // Get state for use in views
   getters: {
     posts: state => state.posts,
+    userPosts: state => state.userPosts,
     user: state => state.user,
+    userFavorites: state => state.user && state.user.favorites,
     loading: state => state.loading,
     error: state => state.error
   },

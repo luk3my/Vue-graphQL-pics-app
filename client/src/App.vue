@@ -11,9 +11,9 @@
           <b-nav-item v-for="item in horizontalNavItems" :key="item.title" :to="item.link">{{item.info}}</b-nav-item>
         </b-navbar-nav>
 
-        <b-badge>
-          <span slot="badge">1</span>
-        </b-badge>
+        <!-- <b-badge vif="user" style="background-color: #3234a8; margin-bottom: 15px;">
+          <span slot="badge" vif="userFavorites.length">{{userFavorites.length}}</span>
+        </b-badge> -->
 
       </b-collapse>
 
@@ -25,12 +25,12 @@
       </b-navbar-brand>
 
       <!-- Search Input -->
-      <b-navbar-nav class="ml-auto">
+      <!-- <b-navbar-nav class="ml-auto">
         <b-nav-form>
           <b-form-input size="sm" class="mr-sm-2" placeholder="Search Posts"></b-form-input>
           <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
         </b-nav-form>
-      </b-navbar-nav>
+      </b-navbar-nav> -->
 
 
       <!-- Sign out button -->
@@ -61,7 +61,7 @@
       }
     },
     computed: {
-      ...mapGetters(['user']),
+      ...mapGetters(['user', 'userFavorites']),
       horizontalNavItems() {
         let items = [
           { info: 'POSTS', title: 'Posts', link: '/posts' },
@@ -71,7 +71,7 @@
         if (this.user) {
           items = [
             { info: 'POSTS', title: 'Posts', link: '/posts' },
-            { info: 'CREATE POST', title: 'Create Post', link: '/post/add' },
+            { info: 'ADD POST', title: 'Create Post', link: '/post/add' },
             { info: 'PROFILE', title: 'profile', link: '/profile' },
           ]
         }

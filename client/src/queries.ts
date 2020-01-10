@@ -57,6 +57,20 @@ export const GET_CURRENT_USER = gql`
   }
 `;
 
+export const GET_USER_POSTS = gql`
+  query($userId: ID!) {
+    getUserPosts(userId: $userId) {
+      _id
+      title
+      imageUrl
+      description
+      categories
+      createdDate
+      likes
+    }
+  }
+`;
+
 export const INFINITE_SCROLL_POSTS = gql`
   query($pageNum: Int!, $pageSize: Int!) {
     infiniteScrollPosts(pageNum: $pageNum, pageSize: $pageSize) {
@@ -107,6 +121,41 @@ export const ADD_POST = gql`
     }
   }
 `;
+
+export const DELETE_USER_POST = gql`
+  mutation($postId: ID!) {
+    deleteUserPost(postId: $postId) {
+      _id
+    }
+  }
+`;
+
+export const LIKE_POST = gql`
+  mutation($postId: ID!, $username: String!) {
+    likePost(postId: $postId, username: $username) {
+      likes
+      favorites {
+        _id
+        title
+        imageUrl
+      }
+    }
+  }
+`;
+
+export const UNLIKE_POST = gql`
+  mutation($postId: ID!, $username: String!) {
+    unlikePost(postId: $postId, username: $username) {
+      likes
+      favorites {
+        _id
+        title
+        imageUrl
+      }
+    }
+  }
+`;
+
 
 // User Mutations
 

@@ -1,6 +1,6 @@
 <template>
-    <b-container style="width: 60%; background-color:#f2f0f0; border-radius: 2%; padding: 8px; margin-top: 30px;">
-
+    <b-container style="margin-top: 30px; width: 50%">
+        <b-card>
         <!-- Add Post Title and form-->
 
         <h1>Add Post</h1>
@@ -43,7 +43,7 @@
                 <b-button v-else-if="!loading" :disabled="loading" variant="primary" type="submit">Add</b-button>
             </b-form>
         </div>
-
+        </b-card>
     </b-container>
 </template>
 

@@ -1,39 +1,40 @@
 <template>
-    <div class="container">
 
-        <!-- Error Alert -->
-        <div v-if="error">
-            <form-alert :message="error.message"></form-alert>
-        </div>
+    <b-container style="width: 50%; margin-top: 30px;">
+        <b-card>
+            <!-- Error Alert -->
+            <div v-if="error">
+                <form-alert :message="error.message"></form-alert>
+            </div>
 
-        <!-- Signin Title and form-->
+            <!-- Signin Title and form-->
 
-        <h1>Sign In</h1>
+            <h1>Sign In</h1>
 
-        <b-form inline @submit.prevent="handleSigninUser" style="margin-top: 20px;">
+            <b-form inline @submit.prevent="handleSigninUser" style="margin-top: 20px;">
 
-            <label class="sr-only" for="inline-form-input-name">Name</label>
-            <b-input id="inline-form-input-name" class="mb-2 mr-sm-2 mb-sm-0" placeholder="User Name" type="text" v-model="username"></b-input>
+                <label class="sr-only" for="inline-form-input-name">Name</label>
+                <b-input id="inline-form-input-name" class="mb-2 mr-sm-2 mb-sm-0" placeholder="User Name" type="text" v-model="username"></b-input>
 
-            <label class="sr-only" for="inline-form-input-name">Pasword</label>
-            <b-input id="inline-form-input-password" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Password" type="password" v-model="password"></b-input>
+                <label class="sr-only" for="inline-form-input-name">Pasword</label>
+                <b-input id="inline-form-input-password" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Password" type="password" v-model="password"></b-input>
 
-            <!-- Spinner in button if loading -->
+                <!-- Spinner in button if loading -->
 
-            <b-button v-if="loading" variant="primary" disabled>
-                <b-spinner small type="grow"></b-spinner>
-                Singing In
-            </b-button>
+                <b-button v-if="loading" variant="primary" disabled>
+                    <b-spinner small type="grow"></b-spinner>
+                    Singing In
+                </b-button>
 
-            <b-button v-else-if="!loading" :disabled="loading" variant="primary" type="submit">Sign In</b-button>
+                <b-button v-else-if="!loading" :disabled="loading" variant="primary" type="submit">Sign In</b-button>
 
-        </b-form>
+            </b-form>
 
-        <p style="margin-top: 20px;">Don't have an account yet?
-            <router-link to="/signup">Sign up here</router-link>
-        </p>
-
-    </div>
+            <p style="margin-top: 20px;">Don't have an account yet?
+                <router-link to="/signup">Sign up here</router-link>
+            </p>
+        </b-card>
+    </b-container>
 
 </template>
 
