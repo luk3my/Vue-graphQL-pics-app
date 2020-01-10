@@ -11,20 +11,30 @@
             <h1>Sign In</h1>
 
             <div>
-                <b-form @submit.prevent="handleSigninUser">
+                <b-form @submit.prevent="submitForm">
                     <b-form-group id="input-group-1" label="Username:" label-for="input-1">
-                        <b-form-input id="input-1" v-model="username" type="text" :state="validate_username" required placeholder="Enter email"></b-form-input>
+                        <b-form-input id="input-1" v-model.trim="$v.username.$model" :class="{'is-invalid':$v.username.$error, 'is-valid': !$v.username.$invalid}"
+                            type="text" required placeholder="Enter User Name"></b-form-input>
+                        <div class="valid-feedback valid">Username is valid.</div>
+                        <div class="invaild-feedback invalid">
+                            <span v-if="!$v.username.required">Username is required</span>
+                            <span v-if="!$v.username.minLength">Username must be at least {{$v.username.$params.minLength.min}} letters</span>
+                            <span v-if="!$v.username.maxLength">Username must not exceed {{$v.username.$params.maxLength.max}} letters</span>
+                        </div>
                     </b-form-group>
-                    <b-form-invalid-feedback :state="validate_username">
-                        Your user ID must be 3-12 characters long.
-                    </b-form-invalid-feedback>
+
 
                     <b-form-group id="input-group-3" label="Password:" label-for="input-3">
-                        <b-form-input id="input-3" v-model="password" type="password" :state="validate_password" required placeholder="Enter password"></b-form-input>
+                        <b-form-input id="input-3" v-model.trim="$v.password.$model" :class="{'is-invalid':$v.password.$error, 'is-valid': !$v.password.$invalid}"
+                            type="password" required placeholder="Enter password"></b-form-input>
+                        <div class="valid-feedback valid">Password is valid.</div>
+                        <div class="invaild-feedback invalid">
+                            <span v-if="!$v.password.required">Password is required</span>
+                            <span v-if="!$v.password.minLength">Password must be at least {{$v.password.$params.minLength.min}} letters</span>
+                            <span v-if="!$v.password.maxLength">Password must not exceed {{$v.password.$params.maxLength.max}} letters</span>
+                        </div>
                     </b-form-group>
-                    <b-form-invalid-feedback :state="validate_password">
-                        Your user ID must be 6-12 characters long.
-                    </b-form-invalid-feedback>
+
 
                     <!-- <b-button type="submit" variant="primary" style="margin-right: 20px;">Sign Up</b-button> -->
                     <b-button v-if="loading" variant="primary" disabled>
@@ -32,7 +42,7 @@
                         Signing In.
                     </b-button>
 
-                    <b-button class="was-validated" v-else-if="!loading" :disabled="loading && state" variant="primary" type="submit">Sign In</b-button>
+                    <b-button class="was-validated" v-else-if="!loading" :disabled="loading && state" variant="primary" type="submit"> {{ submitstatus }}</b-button>
                 </b-form>
             </div>
 
@@ -45,6 +55,7 @@
 </template>
 
 <script>
+    import { required, minLength, maxLength, between } from 'vuelidate/lib/validators';
     import { mapGetters } from 'vuex';
 
     export default {
@@ -53,18 +64,23 @@
             return {
                 username: '',
                 password: '',
-                is_pw_valid: false
+                submitstatus: 'Sign In'
+            }
+        },
+        validations: {
+            username: {
+                required,
+                minLength: minLength(3),
+                maxLength: maxLength(10)
+            },
+            password: {
+                required,
+                minLength: minLength(6),
+                maxLength: maxLength(12)
             }
         },
         computed: {
-            ...mapGetters(["loading", "error", "user"]),
-            validate_username() {
-                return this.username.length > 2 && this.username.length < 13
-
-            },
-            validate_password() {
-                return this.password.length > 5 && this.username.length < 13
-            }
+            ...mapGetters(["loading", "error", "user"])
         },
         watch: {
             user(value) {
@@ -80,8 +96,27 @@
                     username: this.username,
                     password: this.password
                 });
+            },
+            submitForm() {
+                this.$v.$touch()
+                if (this.$v.$invalid) {
+                    this.submitstatus = "Re-try"; 
+                } else {
+                    this.handleSigninUser();
+                    this.submitstatus = "Success";
+                }
             }
         }
     };
 
 </script>
+
+<style>
+    .invalid {
+        color: red;
+    }
+
+    .valid {
+        color: green;
+    }
+</style>

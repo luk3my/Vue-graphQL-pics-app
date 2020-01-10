@@ -2,6 +2,8 @@ import Vue from "vue";
 import App from "./App.vue";
 import "./registerServiceWorker";
 
+import Vuelidate from "vuelidate";
+
 import router from "./router";
 import store from "./store";
 
@@ -21,6 +23,7 @@ import '@fortawesome/fontawesome-free/js/all.js'
 Vue.component('form-alert', FormAlert);
 Vue.use(BootstrapVue);
 Vue.use(VueApollo);
+Vue.use(Vuelidate);
 
 // Setup Apollo Client
 export const defaultClient = new ApolloClient({
