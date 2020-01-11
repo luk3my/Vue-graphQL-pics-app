@@ -150,7 +150,8 @@ module.exports = {
         email,
         password
       }).save();
-      return { token: createToken(newUser, process.env.SECRET, "1hr") };
+      // removed last arg '1hr' was causing issues
+      return { token: createToken(newUser, process.env.SECRET) };
     }
   }
 };
