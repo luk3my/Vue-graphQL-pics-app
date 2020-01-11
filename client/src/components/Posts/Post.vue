@@ -92,7 +92,8 @@
                 }).then(({ data }) => {
                     const updatedUser = { ...this.user, favorites: data.likePost.favorites };
                     this.$store.commit('setUser', updatedUser);
-                }).catch(err => console.error(err));
+                })
+                // .catch(err => console.error(err));
             },
             handleUnlikePost() {
                 const variables = {
@@ -117,7 +118,8 @@
                 }).then(({ data }) => {
                     const updatedUser = { ...this.user, favorites: data.unlikePost.favorites };
                     this.$store.commit('setUser', updatedUser);
-                }).catch(err => console.error(err));
+                })
+                // .catch(err => console.error(err));
             }
         }
     }
