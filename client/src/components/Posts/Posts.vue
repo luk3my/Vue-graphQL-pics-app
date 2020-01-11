@@ -12,7 +12,7 @@
                     </div>
                     <div class="card-footer text-muted" v-show="showPostCreator">
                         <img :src="post.createdBy.avatar" height="25px"> <span>{{post.createdBy.username}}</span><br>
-                        <small>Added: {{post.createdDate}}</small>
+                        <small>Added: {{formatCreatedDate(post.createdDate)}}</small>
                     </div>
                 </div>
             </b-col>
@@ -28,6 +28,8 @@
 
 <script>
     import { INFINITE_SCROLL_POSTS } from '../../queries';
+    import moment from 'moment';
+
 
     const pageSize = 6;
 
@@ -50,6 +52,9 @@
             }
         },
         methods: {
+            formatCreatedDate(date) {
+              return moment(new Date(date)).format('ll');  
+            },
             showMorePosts() {
                 this.pageNum += 1;
                 //Fetch more data and transform original result

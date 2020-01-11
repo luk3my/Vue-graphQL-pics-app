@@ -11,7 +11,8 @@ import {
   SIGNIN_USER,
   SIGNUP_USER,
   ADD_POST,
-  DELETE_USER_POST
+  DELETE_USER_POST,
+  INFINITE_SCROLL_POSTS
 } from "../queries";
 
 Vue.use(Vuex);
@@ -117,7 +118,17 @@ export default new Vuex.Store({
             _id: -1,
             ...payload
           }
-        }
+        },
+        //Rerun specified queries after performing the muation to get fresh data
+        refetchQueries: [
+          {
+            query: INFINITE_SCROLL_POSTS,
+            variables: {
+              pageNum: 1,
+              pageSize: 6
+            }    
+          }
+        ]
       })
         .then(({ data }) => {
           console.log(data.addPost);

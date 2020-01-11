@@ -6,10 +6,10 @@
                     <h2>{{user.username}}</h2>
                     <img style="float: right; margin-top: -50px" :src="user.avatar" alt="user avatar">
                     <b-card-text>
-                        <b>Joined:</b> {{user.joinDate}}
+                        <b>Joined:</b> {{formatJoinDate(user.joinDate)}}
                     </b-card-text>
 
-                    <span>{{user.favorites.length}} Favorites {{userPosts.length}} Posts Added</span>
+                    <span><b>{{user.favorites.length}}</b> Favorites <b>{{userPosts.length}}</b> Posts Added</span>
                 </b-card>
             </b-col>
         </b-row>
@@ -79,6 +79,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import moment from 'moment';
 
     export default {
         name: 'Profile',
@@ -89,6 +90,9 @@
             this.handleGetUserPosts();
         },
         methods: {
+            formatJoinDate(date) {
+              return moment(new Date(date)).format('lll');  
+            },
             goToPost(postId) {
                 this.$router.push(`/posts/${postId}`)
             },
